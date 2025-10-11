@@ -16,13 +16,13 @@ function Result({ result } ) {
   return (
     <div className={` ${
         result === "Berita Ini Hoax!"
-          ? "flex flex-col items-center"
+          ? "flex flex-col justify-center items-center w-full max-w-[1920px] h-auto gap-6 mx-auto px-20"
           : "hidden"
         }`}>
-      <div className="flex justify-start w-[1280px] mb-5">
+      <div className="flex justify-start w-full">
         <p className='text-[28px] font-medium'>Berita Sebenarnya</p>
       </div>
-      <div className='w-[1280px] bg-[#F4F4F4] rounded-[20px] border-2 border-[#EAEAEA]'>
+      <div className='w-full bg-[#F4F4F4] rounded-[20px] border-2 border-[#EAEAEA]'>
           <p className='p-6 text-[24px] font-normal'>{berita}</p>
       </div>
     </div>
