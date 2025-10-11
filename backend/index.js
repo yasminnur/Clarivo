@@ -1,18 +1,13 @@
-import dotenv from 'dotenv';
-import express from 'express';
-import morgan from 'morgan';
-import cors from 'cors';
-
-import submissionsRouter from './routes/submissions.js';
-
-dotenv.config();
+import express from "express";
+import bodyParser from "body-parser";
+import cekFaktaRoutes from "./routes/cekFaktaRoutes.js";
+import { PORT } from "./config/serverConfig.js";
 
 const app = express();
-app.use(cors());
-app.use(morgan('dev'));
-app.use(express.json());
+app.use(bodyParser.json());
 
-app.use('/api/submissions', submissionsRouter);
+app.use("/api/cekfakta", cekFaktaRoutes);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
