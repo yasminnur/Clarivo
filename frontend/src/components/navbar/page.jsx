@@ -7,12 +7,8 @@ export default function Navbar() {
                 <div className="relative h-[40px] w-[128px]">
                     <Image src="assets/logo/logo-clarivo.svg" fill className="absolute top-0 left-0 object-contain" />
                     </div>
-                <div className="flex gap-5 text-[#3B3B3B]">
-                    <Link href="/beranda" className="cursor-pointer">Beranda</Link>
-                    <Link href="/tentang" className="cursor-pointer">Tentang</Link>
-                    <Link href="/cara-kerja" className="cursor-pointer">Cara Kerja</Link>
-                    <Link href="/edukasi" className="cursor-pointer">Edukasi</Link>
-                </div>
+             <button className="px-4 py-3 rounded-full bg-[#0101F6] text-white font-medium text-lg/[130%] tracking-tighter shadow-[0_1px_3px_rgba(1,1,185,0.12),_0_0_0_0.5px_rgba(1,1,185,1),_inset_0_1px_0_rgba(255,255,255,0.12),_inset_0_-2px_0_rgba(1,1,185,1)]
+          active:translate-y-0.5 transition-transform duration-150">Coba sekarang</button>
 
             </div>
         </>
