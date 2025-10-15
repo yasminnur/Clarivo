@@ -10,6 +10,8 @@ import Result from '@/components/result/page'
 function CekBerita() {
     const [status, setStatus] = useState("idle")
     const [result, setResult] = useState(null)
+    const [berita, setBerita] = useState("")
+
   return (
     <div>
       <Navbar/>
@@ -39,8 +41,8 @@ function CekBerita() {
         />
       </div>
         <Hero/>
-        <Form status={status} setStatus={setStatus} result={result} setResult={setResult}/>
-        <Result status={status} setStatus={setStatus} result={result} setResult={setResult}/>
+        <Form status={status} setStatus={setStatus} result={result} setResult={setResult} setBerita={setBerita}/>
+        <Result result={result} berita={berita} setBerita={setBerita}/>
         <Footer/>
       </div>
     </div>
