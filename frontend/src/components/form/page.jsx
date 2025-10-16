@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
+import { cekFaktaAPI } from "../../lib/api/cekfakta";
 
-function Form({ status, setStatus, result, setResult }) {
+
+function Form({ status, setStatus, result, setResult, setBerita }) {
   const [judul, setJudul] = useState('')
   const [isi, setIsi] = useState('')
   const [wordCount, setWordCount] = useState(0)
-  const [persentase, setPersentase] = useState(0)
+  const [persentase, setPersentase] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleJudulChange = (e) => setJudul(e.target.value)
 
@@ -15,26 +18,32 @@ function Form({ status, setStatus, result, setResult }) {
     setWordCount(words.length)
   }
 
-  const handleCheck = () => {
-  if (!judul.trim() || !isi.trim()) return
+  const handleCheck = async () => {
+    setIsLoading(true);
+    if (!judul.trim() || !isi.trim()) return
+    setResult('')
+    setPersentase('0%')
+    setStatus('checking')
 
-  setResult('')
-  setPersentase(0)
-  setStatus('checking')
-
-  setTimeout(() => {
-    const possibleResults = [
-      'Berita Ini Terverifikasi Fakta!',
-      'Berita Ini Hoax!',
-    ]
-    const fakeResult =
-      possibleResults[Math.floor(Math.random() * possibleResults.length)]
-    const randomValue = Math.floor(Math.random() * 101)
-
-    setPersentase(randomValue)
-    setResult(fakeResult)
-    setStatus('checked')
-  }, 2000)
+    setTimeout(async () => {
+      const res = await cekFaktaAPI(judul, isi);
+      console.log("Response dari API cek-fakta:", res);
+      console.log("Response OK:", res.ok);
+      if(res.label == "FAKTA" || res.label == "HOAX") {
+        setPersentase(res.presentaseKemiripan)
+        setResult(res.label)
+        setStatus('checked')
+        if (res.label === "HOAX" && res.beritaSebenarnya) {
+          setBerita(res.beritaSebenarnya)
+        }
+        setIsLoading(false);
+        return
+      }
+      setPersentase('0%')
+      setResult('Gagal memeriksa berita. Silakan coba lagi.')
+      setStatus('checked')
+      setIsLoading(false);
+    }, 2000)
   }
 
 
@@ -82,15 +91,19 @@ function Form({ status, setStatus, result, setResult }) {
           <div className='flex gap-3'>
             <div
               className={`flex items-center gap-[10px] h-[55px] rounded-full py-3 px-4 border ${
-                result === 'Berita Ini Terverifikasi Fakta!'
+                result === 'FAKTA'
                   ? 'border-[#31BF30]'
-                  : 'border-[#EF233C]'
+                  : result === 'HOAX'
+                  ? 'border-[#EF233C]'
+                  : 'border-[#000000]'
               }`}
             >
               <img
                 src={
-                  result === 'Berita Ini Terverifikasi Fakta!'
+                  result === 'FAKTA'
                     ? '/assets/icon/icon-factCheck.svg'
+                    : result === 'HOAX'
+                    ? '/assets/icon/icon-factCheck2.svg'
                     : '/assets/icon/icon-factCheck2.svg'
                 }
                 alt='icon-result'
@@ -98,11 +111,14 @@ function Form({ status, setStatus, result, setResult }) {
               />
               <p
                 className={`text-[20px] font-normal ${
-                  result === 'Berita Ini Terverifikasi Fakta!'
-                    ? 'text-[#31BF30]'
-                    : 'text-[#EF233C]'
+                  result === 'FAKTA'
+                    ? 'text-[#31BF30]' 
+                    : result === 'HOAX'
+                    ? 'text-[#EF233C]'
+                    : 'text-[#000000]'
                 }`}
               >
+              
                 {result}
               </p>
             </div>
@@ -114,7 +130,7 @@ function Form({ status, setStatus, result, setResult }) {
                 className='w-[28px] h-[28px]'
               />
               <p className='text-[20px] font-normal text-[#0101F6]'>
-                Persentase Kemiripan: {persentase}%
+                Persentase Kemiripan: {persentase}
               </p>
             </div>
           </div>
@@ -132,12 +148,42 @@ function Form({ status, setStatus, result, setResult }) {
               : 'bg-[#999999] text-white cursor-not-allowed'
           }`}
         >
-          <img
-            src='/assets/icon/icon-search.svg'
-            alt='icon-search'
-            className='w-[24px] h-[24px]'
-          />
-          Periksa Sekarang
+          {isLoading ? (
+            <>
+              <svg
+                className="animate-spin h-6 w-6 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+              <p>Memeriksa...</p>
+            </>
+          ) : (
+            <>
+            <img
+              src='/assets/icon/icon-search.svg'
+              alt='icon-search'
+              className='w-[24px] h-[24px]'
+            />
+            <p>
+              'Periksa Sekarang'
+            </p>
+            </>
+          )}
         </button>
       </div>
     </div>
