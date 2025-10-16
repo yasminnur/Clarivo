@@ -7,7 +7,7 @@ import { PORT } from "./config/serverConfig.js";
 const app = express();
 app.use(bodyParser.json());
 app.use(cors({
-  origin: "http://localhost:10000"
+  origin: "http://localhost:3000"
 }));
 
 app.use("/api/cekfakta", cekFaktaRoutes);
