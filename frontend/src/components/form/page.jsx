@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { cekFaktaAPI } from "../../lib/api/cekfakta";
+import { cekFaktaAPI } from "../../lib/api/cekFakta";
 
 
 function Form({ status, setStatus, result, setResult, setBerita }) {

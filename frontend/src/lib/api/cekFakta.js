@@ -1,6 +1,6 @@
 export async function cekFaktaAPI(judul, isi) {
   try {
-    const res = await fetch("http://localhost:3000/api/cekfakta", {
+    const res = await fetch("http://localhost:8082/api/cekfakta", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
